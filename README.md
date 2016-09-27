@@ -48,7 +48,7 @@ This will authorize all requests with credentials where the username begins with
 likely look up some data instead ;-)
 
 Note that the `authorizer` function is expected to be synchronous here. This is
-the default behavior, you can pass `async: true` in the options object to indicate
+the default behavior, you can pass `authorizeAsync: true` in the options object to indicate
 that your authorizer is asynchronous. In this case it will be passed a callback
 as the third parameter, which is expected to be called by standard node convention
 with an error and a boolean to indicate if the credentials have been approved or not.
@@ -56,7 +56,7 @@ Let's look at the same authorizer again, but this time asynchronous:
 
     app.use(basicAuth({
         authorizer: myAsyncAuthorizer,
-        async: true
+        authorizeAsync: true
     }));
 
     function myAsyncAuthorizer(username, password, cb) {
