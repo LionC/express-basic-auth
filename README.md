@@ -19,6 +19,14 @@ The middleware will now check incoming requests to match the credentials
 
 ## How it behaves
 
+The middleware will check incoming requests for a basic auth (`Authorization`)
+header, parse it and check if the credentials are legit.
+
+**If a request is found to not be authorized**, it will respond with HTTP 401 and an empty body.
+
+**If a request is successfully authorized**, an `auth` property will be added to the request,
+containing an object with `user` and `password` properties, filled with the credentials.
+
 If you simply want to check basic auth against one or multiple static credentials,
 you can simply pass the credentials as in the example above:
 
