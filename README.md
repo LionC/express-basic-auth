@@ -107,4 +107,4 @@ try out the requests and play around with the options.
 - Allow to set a realm for the challenge
 - Some kind of automated testing with the example server
 - Maybe add some optional callback to be called for unauthorized requests (for security logging)
-- Decide wha should be included in `1.0.0`
+- Decide what should be included in `1.0.0`
