@@ -63,7 +63,7 @@ app.listen(8080, function() {
     console.log("Listening!");
 });
 
-//Cusotm authorizer checking if the username starts with 'A' and the password with 'secret'
+//Custom authorizer checking if the username starts with 'A' and the password with 'secret'
 function myAuthorizer(username, password) {
     return username.startsWith('A') && password.startsWith('secret');
 }
