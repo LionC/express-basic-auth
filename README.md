@@ -2,6 +2,14 @@
 
 Simple plug & play HTTP basic auth middleware for Express.
 
+## How to install
+
+Just run
+
+    npm install express-basic-auth
+
+add the `--save` option to add it to the `dependencies` in your `package.json` as well
+
 ## How to use
 
 The module will export a function, that you can call with an options object to
