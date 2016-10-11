@@ -15,7 +15,7 @@
     "authentication"
   ],
   "author": "LionC <me@lionc.de>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/LionC/express-basic-auth/issues"
   },
