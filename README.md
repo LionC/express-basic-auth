@@ -59,7 +59,7 @@ likely look up some data instead ;-)
 
 # Custom Async Authorization
 
-Note that the `authorizer` function is expected to be synchronous here. This is
+Note that the `authorizer` function above is expected to be synchronous. This is
 the default behavior, you can pass `authorizeAsync: true` in the options object to indicate
 that your authorizer is asynchronous. In this case it will be passed a callback
 as the third parameter, which is expected to be called by standard node convention
@@ -90,7 +90,7 @@ on unauthorized responses:
         challenge: true
     }));
 
-# Try it
+## Try it
 
 The repository contains an `example.js` that you can run to play around and try
 the middleware. To use it just put it somewhere (or leave it where it is), run
@@ -100,3 +100,11 @@ the middleware. To use it just put it somewhere (or leave it where it is), run
 
 This will start a small express server listening at port 8080. Just look at the file,
 try out the requests and play around with the options.
+
+## To Do
+
+- Allow customization of unauthorized response body
+- Allow to set a realm for the challenge
+- Some kind of automated testing with the example server
+- Maybe add some optional callback to be called for unauthorized requests (for security logging)
+- Decide wha should be included in `1.0.0`
