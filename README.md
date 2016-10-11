@@ -25,7 +25,7 @@ header, parse it and check if the credentials are legit.
 **If a request is successfully authorized**, an `auth` property will be added to the request,
 containing an object with `user` and `password` properties, filled with the credentials.
 
-# Static Users
+### Static Users
 
 If you simply want to check basic auth against one or multiple static credentials,
 you can pass those credentials as in the example above:
@@ -41,7 +41,7 @@ you can pass those credentials as in the example above:
 The middleware will check incoming requests to have a basic auth header matching
 one of the three passed credentials.
 
-# Custom authorization
+### Custom authorization
 
 Alternatively, you can pass your own `authorizer` function, to check the credentials
 however you want. It will be called with a username and password and is expected to
@@ -57,7 +57,7 @@ This will authorize all requests with credentials where the username begins with
 `'A'` and the password begins with `'secret'`. In an actual application you would
 likely look up some data instead ;-)
 
-# Custom Async Authorization
+### Custom Async Authorization
 
 Note that the `authorizer` function above is expected to be synchronous. This is
 the default behavior, you can pass `authorizeAsync: true` in the options object to indicate
@@ -78,7 +78,7 @@ Let's look at the same authorizer again, but this time asynchronous:
             return cb(null, false)
     }
 
-# Challenge
+### Challenge
 
 Per default the middleware will not add a `WWW-Authenticate` challenge header to
 responses of unauthorized requests. You can enable that by adding `challenge: true`
