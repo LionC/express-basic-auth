@@ -17,6 +17,8 @@ var basicAuth = require('./index.js');
 * and see how it refuses or accepts your request matching the basic auth settings.
 */
 
+//TODO: Implement some form of automatic testing against the example server
+
 //Requires basic auth with username 'Admin' and password 'secret1234'
 var staticUserAuth = basicAuth({
     users: {
