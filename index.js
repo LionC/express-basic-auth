@@ -2,7 +2,7 @@ var auth = require('basic-auth');
 var assert = require('assert');
 
 function buildMiddleware(options) {
-    var challenge = options.challenge != undefined ? !!options.challenge : true;
+    var challenge = options.challenge != undefined ? !!options.challenge : false;
     var users = options.users || {};
     var authorizer = options.authorizer || staticUsersAuthorizer;
     var isAsync = options.authorizeAsync != undefined ? !!options.authorizeAsync : false;
