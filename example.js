@@ -42,6 +42,16 @@ var asyncAuth = basicAuth({
     authorizeAsync: true
 });
 
+//Uses a custom response body function
+var customBodyAuth = basicAuth({
+    users: { 'Foo': 'bar' },
+    unauthorizedResponse: getUnauthorizedResponse
+});
+
+//Uses a static response body
+var staticBodyAuth = basicAuth({
+    unauthorizedResponse: 'Haaaaaha'
+});
 
 app.get('/static', staticUserAuth, function(req, res) {
     res.status(200).send('You passed');
@@ -56,6 +66,14 @@ app.get('/challenge', challengeAuth, function(req, res) {
 });
 
 app.get('/async', asyncAuth, function(req, res) {
+    res.status(200).send('You passed');
+});
+
+app.get('/custombody', customBodyAuth, function(req, res) {
+    res.status(200).send('You passed');
+});
+
+app.get('/staticbody', staticBodyAuth, function(req, res) {
     res.status(200).send('You passed');
 });
 
@@ -74,4 +92,8 @@ function myAsyncAuthorizer(username, password, cb) {
         return cb(null, true);
     else
         return cb(null, false)
+}
+
+function getUnauthorizedResponse(req) {
+    return req.auth ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected') : 'No credentials provided';
 }

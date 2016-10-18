@@ -32,7 +32,8 @@ The middleware will now check incoming requests to match the credentials
 The middleware will check incoming requests for a basic auth (`Authorization`)
 header, parse it and check if the credentials are legit.
 
-**If a request is found to not be authorized**, it will respond with HTTP 401 and an empty body.
+**If a request is found to not be authorized**, it will respond with HTTP 401
+and a configurable (default empty) body.
 
 **If a request is successfully authorized**, an `auth` property will be added to the request,
 containing an object with `user` and `password` properties, filled with the credentials.
@@ -96,6 +97,26 @@ function myAsyncAuthorizer(username, password, cb) {
 }
 ```
 
+### Unauthorized Response Body
+
+Per default, the response body for unauthorized responses will be empty. It can
+be configured using the `unauthorizedResponse` option. You can either pass a
+simple string, which will be used as the response body, or a function that gets
+passed the express request object and is expected to return the response body:
+
+```js
+app.use(basicAuth({
+    users: { 'Foo': 'bar' },
+    unauthorizedResponse: getUnauthorizedResponse
+}));
+
+function getUnauthorizedResponse(req) {
+    return req.auth
+        ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected')
+        : 'No credentials provided';
+}
+```
+
 ### Challenge
 
 Per default the middleware will not add a `WWW-Authenticate` challenge header to
@@ -125,8 +146,7 @@ try out the requests and play around with the options.
 
 ## To Do
 
-- Allow customization of unauthorized response body
+- Allow response body to be JSON (auto detect?)
 - Allow to set a realm for the challenge
 - Some kind of automated testing with the example server
-- Maybe add some optional callback to be called for unauthorized requests (for security logging)
 - Decide what should be included in `1.0.0`

@@ -6,7 +6,14 @@ function buildMiddleware(options) {
     var users = options.users || {};
     var authorizer = options.authorizer || staticUsersAuthorizer;
     var isAsync = options.authorizeAsync != undefined ? !!options.authorizeAsync : false;
+    var getResponseBody = options.unauthorizedResponse;
 
+    if(!getResponseBody)
+        getResponseBody = function() { return ''; };
+    else if(typeof getResponseBody == 'string')
+        getResponseBody = function() { return options.unauthorizedResponse };
+
+    assert(typeof getResponseBody == 'function', 'Expected a string or function for the unauthorizedResponse option');
     assert(typeof users == 'object', 'Expected an object for the basic auth users, found ' + typeof users + ' instead');
     assert(typeof authorizer == 'function', 'Expected a function for the basic auth authorizer, found ' + typeof authorizer + ' instead');
 
@@ -24,15 +31,15 @@ function buildMiddleware(options) {
         if(!authentication)
             return unauthorized();
 
-        if(isAsync)
-            return authorizer(authentication.name, authentication.pass, authorizerCallback);
-        else if(!authorizer(authentication.name, authentication.pass))
-            return unauthorized();
-
         req.auth = {
             user: authentication.name,
             password: authentication.pass
         };
+
+        if(isAsync)
+            return authorizer(authentication.name, authentication.pass, authorizerCallback);
+        else if(!authorizer(authentication.name, authentication.pass))
+            return unauthorized();
 
         next();
 
@@ -42,7 +49,7 @@ function buildMiddleware(options) {
             if(challenge)
                 res.set('WWW-Authenticate', 'Basic');
 
-            return res.send('');
+            return res.send(getResponseBody(req));
         }
 
         function authorizerCallback(err, approved) {
