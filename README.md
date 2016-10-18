@@ -30,13 +30,13 @@ The middleware will now check incoming requests to match the credentials
 `admin:supersecret`.
 
 The middleware will check incoming requests for a basic auth (`Authorization`)
-header, parse it and check if the credentials are legit.
+header, parse it and check if the credentials are legit. If there are any
+credentials, an `auth` property will be added to the request, containing
+an object with `user` and `password` properties, filled with the credentials,
+no matter if they are legit or not.
 
 **If a request is found to not be authorized**, it will respond with HTTP 401
 and a configurable (default empty) body.
-
-**If a request is successfully authorized**, an `auth` property will be added to the request,
-containing an object with `user` and `password` properties, filled with the credentials.
 
 ### Static Users
 
