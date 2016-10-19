@@ -36,12 +36,12 @@ an object with `user` and `password` properties, filled with the credentials,
 no matter if they are legit or not.
 
 **If a request is found to not be authorized**, it will respond with HTTP 401
-and a configurable (default empty) body.
+and a configurable body (default empty).
 
 ### Static Users
 
 If you simply want to check basic auth against one or multiple static credentials,
-you can pass those credentials as in the example above:
+you can pass those credentials in the `users` option:
 
 ```js
 app.use(basicAuth({
