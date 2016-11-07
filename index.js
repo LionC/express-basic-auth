@@ -41,7 +41,7 @@ function buildMiddleware(options) {
         else if(!authorizer(authentication.name, authentication.pass))
             return unauthorized();
 
-        next();
+        return next();
 
         function unauthorized() {
             //TODO: Allow to set realm for the challenge
