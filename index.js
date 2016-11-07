@@ -44,14 +44,12 @@ function buildMiddleware(options) {
         next();
 
         function unauthorized() {
-            res.status(401);
-
             //TODO: Allow to set realm for the challenge
             if(challenge)
                 res.set('WWW-Authenticate', 'Basic');
 
             //TODO: Allow response body to be JSON (maybe autodetect?)
-            return res.send(getResponseBody(req));
+            return res.status(401).send(getResponseBody(req));
         }
 
         function authorizerCallback(err, approved) {
