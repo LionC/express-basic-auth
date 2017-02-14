@@ -1,8 +1,8 @@
-var express = require('express');
+const express = require('express')
 
-var app = express();
+var app = express()
 
-var basicAuth = require('./index.js');
+const basicAuth = require('./index.js')
 
 /**
 * express-basic-auth
@@ -25,86 +25,86 @@ var staticUserAuth = basicAuth({
         'Admin': 'secret1234'
     },
     challenge: false
-});
+})
 
 //Uses a custom (synchronous) authorizer function
 var customAuthorizerAuth = basicAuth({
     authorizer: myAuthorizer
-});
+})
 
 //Same, but sends a basic auth challenge header when authorization fails
 var challengeAuth = basicAuth({
     authorizer: myAuthorizer,
     challenge: true
-});
+})
 
 //Uses a custom asynchronous authorizer function
 var asyncAuth = basicAuth({
     authorizer: myAsyncAuthorizer,
     authorizeAsync: true
-});
+})
 
 //Uses a custom response body function
 var customBodyAuth = basicAuth({
     users: { 'Foo': 'bar' },
     unauthorizedResponse: getUnauthorizedResponse
-});
+})
 
 //Uses a static response body
 var staticBodyAuth = basicAuth({
     unauthorizedResponse: 'Haaaaaha'
-});
+})
 
 //Uses a JSON response body
 var jsonBodyAuth = basicAuth({
     unauthorizedResponse: { foo: 'bar' }
-});
+})
 
 app.get('/static', staticUserAuth, function(req, res) {
-    res.status(200).send('You passed');
-});
+    res.status(200).send('You passed')
+})
 
 app.get('/custom', customAuthorizerAuth, function(req, res) {
-    res.status(200).send('You passed');
-});
+    res.status(200).send('You passed')
+})
 
 app.get('/challenge', challengeAuth, function(req, res) {
-    res.status(200).send('You passed');
-});
+    res.status(200).send('You passed')
+})
 
 app.get('/async', asyncAuth, function(req, res) {
-    res.status(200).send('You passed');
-});
+    res.status(200).send('You passed')
+})
 
 app.get('/custombody', customBodyAuth, function(req, res) {
-    res.status(200).send('You passed');
-});
+    res.status(200).send('You passed')
+})
 
 app.get('/staticbody', staticBodyAuth, function(req, res) {
-    res.status(200).send('You passed');
-});
+    res.status(200).send('You passed')
+})
 
 app.get('/jsonbody', jsonBodyAuth, function(req, res) {
-    res.status(200).send('You passed');
-});
+    res.status(200).send('You passed')
+})
 
 app.listen(8080, function() {
-    console.log("Listening!");
-});
+    console.log("Listening!")
+})
 
 //Custom authorizer checking if the username starts with 'A' and the password with 'secret'
 function myAuthorizer(username, password) {
-    return username.startsWith('A') && password.startsWith('secret');
+    return username.startsWith('A') && password.startsWith('secret')
 }
 
 //Same but asynchronous
 function myAsyncAuthorizer(username, password, cb) {
     if(username.startsWith('A') && password.startsWith('secret'))
-        return cb(null, true);
+        return cb(null, true)
     else
         return cb(null, false)
 }
 
 function getUnauthorizedResponse(req) {
-    return req.auth ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected') : 'No credentials provided';
+    return req.auth ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected') : 'No credentials provided'
 }

@@ -18,12 +18,12 @@ The module will export a function, that you can call with an options object to
 get the middleware:
 
 ```js
-var app = require('express')();
-var basicAuth = require('express-basic-auth');
+var app = require('express')()
+var basicAuth = require('express-basic-auth')
 
 app.use(basicAuth({
     users: { 'admin': 'supersecret' }
-}));
+}))
 ```
 
 The middleware will now check incoming requests to match the credentials
@@ -50,7 +50,7 @@ app.use(basicAuth({
         'adam': 'password1234',
         'eve': 'asdfghjkl'
     }
-}));
+}))
 ```
 
 The middleware will check incoming requests to have a basic auth header matching
@@ -63,10 +63,10 @@ however you want. It will be called with a username and password and is expected
 return `true` or `false` to indicate that the credentials were approved or not:
 
 ```js
-app.use(basicAuth( { authorizer: myAuthorizer } ));
+app.use(basicAuth( { authorizer: myAuthorizer } ))
 
 function myAuthorizer(username, password) {
-    return username.startsWith('A') && password.startsWith('secret');
+    return username.startsWith('A') && password.startsWith('secret')
 }
 ```
 
@@ -87,11 +87,11 @@ Let's look at the same authorizer again, but this time asynchronous:
 app.use(basicAuth({
     authorizer: myAsyncAuthorizer,
     authorizeAsync: true
-}));
+}))
 
 function myAsyncAuthorizer(username, password, cb) {
     if(username.startsWith('A') && password.startsWith('secret'))
-        return cb(null, true);
+        return cb(null, true)
     else
         return cb(null, false)
 }
@@ -109,12 +109,12 @@ be used as-is, otherwise it will be sent as JSON:
 app.use(basicAuth({
     users: { 'Foo': 'bar' },
     unauthorizedResponse: getUnauthorizedResponse
-}));
+}))
 
 function getUnauthorizedResponse(req) {
-    return req.auth
-        ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected')
-        : 'No credentials provided';
+    return req.auth ?
+        ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected') :
+        'No credentials provided'
 }
 ```
 
@@ -129,7 +129,7 @@ on unauthorized responses:
 app.use(basicAuth({
     users: { 'someuser': 'somepassword' },
     challenge: true
-}));
+}))
 ```
 
 ## Try it
