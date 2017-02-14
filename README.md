@@ -147,7 +147,6 @@ try out the requests and play around with the options.
 
 ## To Do
 
-- Allow response body to be JSON (auto detect?)
 - Allow to set a realm for the challenge
 - Some kind of automated testing with the example server
 - Decide what should be included in `1.0.0`
