@@ -10,7 +10,7 @@ function buildMiddleware(options) {
 
     if(!getResponseBody)
         getResponseBody = function() { return ''; };
-    else if(typeof getResponseBody == 'string')
+    else if(typeof getResponseBody != 'function')
         getResponseBody = function() { return options.unauthorizedResponse };
 
     assert(typeof getResponseBody == 'function', 'Expected a string or function for the unauthorizedResponse option');
@@ -49,7 +49,12 @@ function buildMiddleware(options) {
                 res.set('WWW-Authenticate', 'Basic');
 
             //TODO: Allow response body to be JSON (maybe autodetect?)
-            return res.status(401).send(getResponseBody(req));
+            const response = getResponseBody(req);
+
+            if(typeof response == 'string')
+                return res.status(401).send(response);
+
+            return res.status(401).json(response);
         }
 
         function authorizerCallback(err, approved) {

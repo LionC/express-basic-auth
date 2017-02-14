@@ -55,6 +55,11 @@ var staticBodyAuth = basicAuth({
     unauthorizedResponse: 'Haaaaaha'
 });
 
+//Uses a JSON response body
+var jsonBodyAuth = basicAuth({
+    unauthorizedResponse: { foo: 'bar' }
+});
+
 app.get('/static', staticUserAuth, function(req, res) {
     res.status(200).send('You passed');
 });
@@ -76,6 +81,10 @@ app.get('/custombody', customBodyAuth, function(req, res) {
 });
 
 app.get('/staticbody', staticBodyAuth, function(req, res) {
+    res.status(200).send('You passed');
+});
+
+app.get('/jsonbody', jsonBodyAuth, function(req, res) {
     res.status(200).send('You passed');
 });
 

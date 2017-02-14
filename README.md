@@ -101,8 +101,9 @@ function myAsyncAuthorizer(username, password, cb) {
 
 Per default, the response body for unauthorized responses will be empty. It can
 be configured using the `unauthorizedResponse` option. You can either pass a
-simple string, which will be used as the response body, or a function that gets
-passed the express request object and is expected to return the response body:
+static response or a function that gets passed the express request object and is
+expected to return the response body. If the response body is a string, it will
+be used as-is, otherwise it will be sent as JSON:
 
 ```js
 app.use(basicAuth({
