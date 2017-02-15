@@ -1,11 +1,11 @@
 const auth = require('basic-auth')
 const assert = require('assert')
 
-function ensureFunction(option, default) {
+function ensureFunction(option, defaultValue) {
     if(option == undefined)
-        return function() { return default }
+        return function() { return defaultValue }
 
-    if(typeof getResponseBody != 'function')
+    if(typeof option != 'function')
         return function() { return option }
 
     return option
@@ -49,9 +49,15 @@ function buildMiddleware(options) {
         return next()
 
         function unauthorized() {
-            //TODO: Allow to set realm for the challenge
-            if(challenge)
-                res.set('WWW-Authenticate', 'Basic')
+            if(challenge) {
+                var challengeString = 'Basic'
+                var realmName = realm(req)
+
+                if(realmName)
+                    challengeString += ' realm="' + realmName + '"'
+
+                res.set('WWW-Authenticate', challengeString)
+            }
 
             //TODO: Allow response body to be JSON (maybe autodetect?)
             const response = getResponseBody(req)
