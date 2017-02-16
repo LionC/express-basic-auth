@@ -122,13 +122,17 @@ function getUnauthorizedResponse(req) {
 
 Per default the middleware will not add a `WWW-Authenticate` challenge header to
 responses of unauthorized requests. You can enable that by adding `challenge: true`
-to the options object. This will cause most browsers to show a popup to enter credentials
-on unauthorized responses:
+to the options object. This will cause most browsers to show a popup to enter
+credentials on unauthorized responses. You can set the realm (the realm
+identifies the system to authenticate against and can be used by clients to save
+credentials) of the challenge by passing a static string or a function that gets
+passed the request object:
 
 ```js
 app.use(basicAuth({
     users: { 'someuser': 'somepassword' },
-    challenge: true
+    challenge: true,
+    realm: 'Imb4T3st4pp'
 }))
 ```
 

@@ -60,6 +60,20 @@ var jsonBodyAuth = basicAuth({
     unauthorizedResponse: { foo: 'bar' }
 })
 
+//Uses a custom realm
+var realmAuth = basicAuth({
+    challenge: true,
+    realm: 'test'
+})
+
+//Uses a custom realm function
+var realmFunctionAuth = basicAuth({
+    challenge: true,
+    realm: function (req) {
+        return 'bla'
+    }
+})
+
 app.get('/static', staticUserAuth, function(req, res) {
     res.status(200).send('You passed')
 })
@@ -85,6 +99,14 @@ app.get('/staticbody', staticBodyAuth, function(req, res) {
 })
 
 app.get('/jsonbody', jsonBodyAuth, function(req, res) {
+    res.status(200).send('You passed')
+})
+
+app.get('/realm', realmAuth, function(req, res) {
+    res.status(200).send('You passed')
+})
+
+app.get('/realmfunction', realmFunctionAuth, function(req, res) {
     res.status(200).send('You passed')
 })
 
