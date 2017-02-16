@@ -112,7 +112,7 @@ describe('express-basic-auth', function() {
             supertest(app)
                 .get(endpoint)
                 .auth('Admin', 'secret1234')
-                .expect(200, done)
+                .expect(200, 'You passed', done)
         })
     })
 
@@ -136,7 +136,7 @@ describe('express-basic-auth', function() {
             supertest(app)
                 .get(endpoint)
                 .auth('Aloha', 'secretverymuch')
-                .expect(200, done)
+                .expect(200, 'You passed', done)
         })
     })
 
@@ -160,7 +160,31 @@ describe('express-basic-auth', function() {
             supertest(app)
                 .get(endpoint)
                 .auth('Aererer', 'secretiveStuff')
-                .expect(200, done)
+                .expect(200, 'You passed', done)
+        })
+    })
+
+    describe('custom body', function() {
+        const endpoint = '/custombody'
+
+        it('should reject on missing header and generate resposne message', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .expect(401, 'No credentials provided', done)
+        })
+
+        it('should reject on wrong credentials and generate response message', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('dude', 'stuff')
+                .expect(401, 'Credentials dude:stuff rejected', done)
+        })
+
+        it('should accept fitting credentials', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('Foo', 'bar')
+                .expect(200, 'You passed', done)
         })
     })
 })
