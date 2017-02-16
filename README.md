@@ -145,8 +145,15 @@ node example.js
 This will start a small express server listening at port 8080. Just look at the file,
 try out the requests and play around with the options.
 
+## Tests
+
+The cases in the `example.js` are also used for automated testing. So if you want  
+to contribute or just make sure that the package still works, simply run:
+
+```shell
+npm test
+```
+
 ## To Do
 
 - Allow to set a realm for the challenge
-- Some kind of automated testing with the example server
-- Decide what should be included in `1.0.0`
