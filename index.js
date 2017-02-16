@@ -1,19 +1,24 @@
 const auth = require('basic-auth')
 const assert = require('assert')
 
+function ensureFunction(option, defaultValue) {
+    if(option == undefined)
+        return function() { return defaultValue }
+
+    if(typeof option != 'function')
+        return function() { return option }
+
+    return option
+}
+
 function buildMiddleware(options) {
     var challenge = options.challenge != undefined ? !!options.challenge : false
     var users = options.users || {}
     var authorizer = options.authorizer || staticUsersAuthorizer
     var isAsync = options.authorizeAsync != undefined ? !!options.authorizeAsync : false
-    var getResponseBody = options.unauthorizedResponse
+    var getResponseBody = ensureFunction(options.unauthorizedResponse, '')
+    var realm = ensureFunction(options.realm)
 
-    if(!getResponseBody)
-        getResponseBody = function() { return '' }
-    else if(typeof getResponseBody != 'function')
-        getResponseBody = function() { return options.unauthorizedResponse }
-
-    assert(typeof getResponseBody == 'function', 'Expected a string or function for the unauthorizedResponse option')
     assert(typeof users == 'object', 'Expected an object for the basic auth users, found ' + typeof users + ' instead')
     assert(typeof authorizer == 'function', 'Expected a function for the basic auth authorizer, found ' + typeof authorizer + ' instead')
 
@@ -44,9 +49,15 @@ function buildMiddleware(options) {
         return next()
 
         function unauthorized() {
-            //TODO: Allow to set realm for the challenge
-            if(challenge)
-                res.set('WWW-Authenticate', 'Basic')
+            if(challenge) {
+                var challengeString = 'Basic'
+                var realmName = realm(req)
+
+                if(realmName)
+                    challengeString += ' realm="' + realmName + '"'
+
+                res.set('WWW-Authenticate', challengeString)
+            }
 
             //TODO: Allow response body to be JSON (maybe autodetect?)
             const response = getResponseBody(req)

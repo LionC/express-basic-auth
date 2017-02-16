@@ -3,6 +3,9 @@
   "version": "0.3.3",
   "description": "Plug & play basic auth middleware for express",
   "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LionC/express-basic-auth.git"
@@ -22,5 +25,10 @@
   "homepage": "https://github.com/LionC/express-basic-auth#readme",
   "dependencies": {
     "basic-auth": "^1.0.4"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "should": "^11.2.0",
+    "supertest": "^3.0.0"
   }
 }

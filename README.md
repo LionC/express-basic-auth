@@ -125,13 +125,17 @@ function getUnauthorizedResponse(req) {
 
 Per default the middleware will not add a `WWW-Authenticate` challenge header to
 responses of unauthorized requests. You can enable that by adding `challenge: true`
-to the options object. This will cause most browsers to show a popup to enter credentials
-on unauthorized responses:
+to the options object. This will cause most browsers to show a popup to enter
+credentials on unauthorized responses. You can set the realm (the realm
+identifies the system to authenticate against and can be used by clients to save
+credentials) of the challenge by passing a static string or a function that gets
+passed the request object and is expected to return the challenge:
 
 ```js
 app.use(basicAuth({
     users: { 'someuser': 'somepassword' },
-    challenge: true
+    challenge: true,
+    realm: 'Imb4T3st4pp'
 }))
 ```
 
@@ -148,8 +152,11 @@ node example.js
 This will start a small express server listening at port 8080. Just look at the file,
 try out the requests and play around with the options.
 
-## To Do
+## Tests
 
-- Allow to set a realm for the challenge
-- Some kind of automated testing with the example server
-- Decide what should be included in `1.0.0`
+The cases in the `example.js` are also used for automated testing. So if you want  
+to contribute or just make sure that the package still works, simply run:
+
+```shell
+npm test
+```
