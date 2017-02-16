@@ -108,6 +108,17 @@ describe('express-basic-auth', function() {
                 .expect(401, done)
         })
 
+        it('should reject without challenge', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('dude', 'stuff')
+                .expect(function (res) {
+                    if(res.headers['WWW-Authenticate'])
+                        throw new Error('Response should not have a challenge')
+                })
+                .expect(401, done)
+        })
+
         it('should accept correct credentials', function(done) {
             supertest(app)
                 .get(endpoint)
@@ -164,27 +175,46 @@ describe('express-basic-auth', function() {
         })
     })
 
-    describe('custom body', function() {
-        const endpoint = '/custombody'
-
+    describe('custom response body', function() {
         it('should reject on missing header and generate resposne message', function(done) {
             supertest(app)
-                .get(endpoint)
+                .get('/custombody')
                 .expect(401, 'No credentials provided', done)
         })
 
         it('should reject on wrong credentials and generate response message', function(done) {
             supertest(app)
-                .get(endpoint)
+                .get('/custombody')
                 .auth('dude', 'stuff')
                 .expect(401, 'Credentials dude:stuff rejected', done)
         })
 
         it('should accept fitting credentials', function(done) {
             supertest(app)
-                .get(endpoint)
+                .get('/custombody')
                 .auth('Foo', 'bar')
                 .expect(200, 'You passed', done)
+        })
+
+        it('should reject and send static custom resposne message', function(done) {
+            supertest(app)
+            .get('/staticbody')
+            .expect(401, 'Haaaaaha', done)
+        })
+
+        it('should reject and send static custom json resposne message', function(done) {
+            supertest(app)
+            .get('/jsonbody')
+            .expect(401, { foo: 'bar' }, done)
+        })
+    })
+
+    describe('challenge', function() {
+        it('should reject with challenge', function(done) {
+            supertest(app)
+                .get('/challenge')
+                .expect('WWW-Authenticate', 'Basic')
+                .expect(401, done)
         })
     })
 })
