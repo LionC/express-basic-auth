@@ -46,6 +46,20 @@ var jsonBodyAuth = basicAuth({
     unauthorizedResponse: { foo: 'bar' }
 })
 
+//Uses a custom realm
+var realmAuth = basicAuth({
+    challenge: true,
+    realm: 'test'
+})
+
+//Uses a custom realm function
+var realmFunctionAuth = basicAuth({
+    challenge: true,
+    realm: function (req) {
+        return 'bla'
+    }
+})
+
 app.get('/static', staticUserAuth, function(req, res) {
     res.status(200).send('You passed')
 })
@@ -71,6 +85,14 @@ app.get('/staticbody', staticBodyAuth, function(req, res) {
 })
 
 app.get('/jsonbody', jsonBodyAuth, function(req, res) {
+    res.status(200).send('You passed')
+})
+
+app.get('/realm', realmAuth, function(req, res) {
+    res.status(200).send('You passed')
+})
+
+app.get('/realmfunction', realmFunctionAuth, function(req, res) {
     res.status(200).send('You passed')
 })
 
@@ -210,10 +232,24 @@ describe('express-basic-auth', function() {
     })
 
     describe('challenge', function() {
-        it('should reject with challenge', function(done) {
+        it('should reject with blank challenge', function(done) {
             supertest(app)
                 .get('/challenge')
                 .expect('WWW-Authenticate', 'Basic')
+                .expect(401, done)
+        })
+
+        it('should reject with custom realm challenge', function(done) {
+            supertest(app)
+                .get('/realm')
+                .expect('WWW-Authenticate', 'Basic realm="test"')
+                .expect(401, done)
+        })
+
+        it('should reject with custom generated realm challenge', function(done) {
+            supertest(app)
+                .get('/realmfunction')
+                .expect('WWW-Authenticate', 'Basic realm="bla"')
                 .expect(401, done)
         })
     })
