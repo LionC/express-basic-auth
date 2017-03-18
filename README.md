@@ -2,6 +2,8 @@
 
 [![npm version](https://badge.fury.io/js/express-basic-auth.svg)](https://badge.fury.io/js/express-basic-auth)
 [![npm](https://img.shields.io/npm/dm/express-basic-auth.svg)]()
+[![David](https://img.shields.io/david/strongloop/express.svg)]()
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 Simple plug & play HTTP basic auth middleware for Express.
 
