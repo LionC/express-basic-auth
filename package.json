@@ -15,7 +15,8 @@
     "middleware",
     "basic",
     "auth",
-    "authentication"
+    "authentication",
+    "http"
   ],
   "author": "LionC <me@lionc.de>",
   "license": "MIT",
