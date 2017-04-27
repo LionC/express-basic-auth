@@ -1,6 +1,6 @@
 {
   "name": "express-basic-auth",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Plug & play basic auth middleware for express",
   "main": "index.js",
   "scripts": {
