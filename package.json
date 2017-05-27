@@ -3,6 +3,7 @@
   "version": "1.0.2",
   "description": "Plug & play basic auth middleware for express",
   "main": "index.js",
+  "types": "express-basic-auth.d.ts",
   "scripts": {
     "test": "mocha test.js"
   },
