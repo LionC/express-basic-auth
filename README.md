@@ -3,6 +3,7 @@
 [![npm version](https://badge.fury.io/js/express-basic-auth.svg)](https://badge.fury.io/js/express-basic-auth)
 [![npm](https://img.shields.io/npm/dm/express-basic-auth.svg)]()
 [![David](https://img.shields.io/david/strongloop/express.svg)]()
+![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 Simple plug & play HTTP basic auth middleware for Express.
@@ -153,6 +154,47 @@ node example.js
 
 This will start a small express server listening at port 8080. Just look at the file,
 try out the requests and play around with the options.
+
+## TypeScript usage
+
+A declaration file is bundled with the library. You don't have to install a `@types/` package.
+
+```typescript
+import * as basicAuth from 'express-basic-auth';
+```
+
+:bulb: **Using `req.auth`**
+
+express-basic-auth sets `req.auth` to an object containing `{ user: 'alice', password: '1234' }`.
+
+In order to use that `req.auth` property in TypeScript without an unknown property error, use covariance to downcast the request type:
+
+```typescript
+app.use(basicAuth(options), (req: basicAuth.IBasicAuthedRequest, res, next) => {
+    res.end(`Welcome ${req.auth.user} (your password is ${req.auth.password})`);
+    next();
+});
+```
+
+:bulb: **A note about type inference on synchronous authorizers**
+
+Due to some TypeScript's type-system limitation, the arguments' type of the synchronous authorizers are not inferred.
+For example, on an asynchronous authorizer, the three arguments are correctly inferred:
+
+```typescript
+basicAuth({
+    authorizeAsync: true,
+    authorizer: (user, password, authorize) => authorize(null, password == 'secret')
+});
+```
+
+However, on a synchronous authorizer, you'll have to type the arguments yourself:
+
+```typescript
+basicAuth({
+    authorizer: (user: string, password: string) => (password == 'secret')
+});
+```
 
 ## Tests
 
