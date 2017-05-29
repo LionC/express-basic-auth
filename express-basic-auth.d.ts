@@ -1,17 +1,17 @@
 /// <reference types="express" />
 
-import { Request, RequestHandler } from 'express';
+import { Request, RequestHandler } from 'express'
 
 /**
  * This is the middleware builder.
  *
  * Example:
- *     const users = { alice: '1234', bob: 'correcthorsebatterystaple' };
- *     app.use(basicAuth({ users, challenge: true }), myHandler);
+ *     const users = { alice: '1234', bob: 'correcthorsebatterystaple' }
+ *     app.use(basicAuth({ users, challenge: true }), myHandler)
  *
  * @param options The middleware's options (at least 'users' or 'authorizer' are mandatory).
  */
-function expressBasicAuth(options: expressBasicAuth.BasicAuthMiddlewareOptions): RequestHandler;
+function expressBasicAuth(options: expressBasicAuth.BasicAuthMiddlewareOptions): RequestHandler
 
 namespace expressBasicAuth {
     /**
@@ -20,28 +20,28 @@ namespace expressBasicAuth {
      *  - An authorizer function
      *  - An asynchronous authorizer function
      */
-    export type BasicAuthMiddlewareOptions = IUsersOptions | (IAuthorizerOptions | IAsyncAuthorizerOptions);
+    export type BasicAuthMiddlewareOptions = IUsersOptions | (IAuthorizerOptions | IAsyncAuthorizerOptions)
 
     /**
      * express-basic-auth patches the request object to set an `auth` property that lets you retrieve the authed user.
      *
      * Example (TypeScript):
      *     app.use(basicAuth({ ... }), (req: basicAuth.IBasicAuthedRequest, res, next) => {
-     *         res.end(`Welcome ${req.auth.user} (your password is ${req.auth.password})`);
-     *         next();
-     *     });
+     *         res.end(`Welcome ${req.auth.user} (your password is ${req.auth.password})`)
+     *         next()
+     *     })
      */
     export interface IBasicAuthedRequest extends Request {
-        auth: { user: string, password: string };
+        auth: { user: string, password: string }
     }
 
-    type Authorizer = (username: string, password: string) => boolean;
+    type Authorizer = (username: string, password: string) => boolean
 
-    type AsyncAuthorizerCallback = (err: any, authed?: boolean) => void;
+    type AsyncAuthorizerCallback = (err: any, authed?: boolean) => void
 
-    type AsyncAuthorizer = (username: string, password: string, callback: AsyncAuthorizerCallback) => void;
+    type AsyncAuthorizer = (username: string, password: string, callback: AsyncAuthorizerCallback) => void
 
-    type ValueOrFunction<T> = T | ((req: IBasicAuthedRequest) => T);
+    type ValueOrFunction<T> = T | ((req: IBasicAuthedRequest) => T)
 
     interface IBaseOptions {
         /**
@@ -51,7 +51,7 @@ namespace expressBasicAuth {
          *
          * @default false
          */
-        challenge?: boolean;
+        challenge?: boolean
 
         /**
          * You can set the realm (the realm identifies the system to authenticate against and can be used by clients to
@@ -60,7 +60,7 @@ namespace expressBasicAuth {
          *
          * @default undefined
          */
-        realm?: ValueOrFunction<string>;
+        realm?: ValueOrFunction<string>
 
         /**
          * Per default, the response body for unauthorized responses will be empty.
@@ -70,7 +70,7 @@ namespace expressBasicAuth {
          *
          * @default ''
          */
-        unauthorizedResponse?: ValueOrFunction<any>;
+        unauthorizedResponse?: ValueOrFunction<any>
     }
 
     interface IUsersOptions extends IBaseOptions {
@@ -79,17 +79,17 @@ namespace expressBasicAuth {
          * credentials in the users option.
          *
          * Example:
-         *     const users = { alice: '1234', bob: 'correcthorsebatterystaple' };
-         *     app.use(basicAuth({ users, challenge: true }), myHandler);
+         *     const users = { alice: '1234', bob: 'correcthorsebatterystaple' }
+         *     app.use(basicAuth({ users, challenge: true }), myHandler)
          */
-        users: { [username: string]: string };
+        users: { [username: string]: string }
     }
 
     interface IAuthorizerOptions extends IBaseOptions {
         /**
-         * Set it to false - or simply don't set it - to use a synchronous authorizer.
+         * Set to true if your authorizer is asynchronous.
          */
-        authorizeAsync?: false;
+        authorizeAsync?: false
 
         /**
          * You can pass your own authorizer function, to check the credentials however you want.
@@ -97,7 +97,7 @@ namespace expressBasicAuth {
          * credentials were approved or not:
          *
          * Example:
-         *     app.use(basicAuth({ authorizer }));
+         *     app.use(basicAuth({ authorizer }))
          *
          *     function myAuthorizer(username: string, password: string) {
          *         return username.startsWith('A') && password.startsWith('secret');
@@ -106,14 +106,14 @@ namespace expressBasicAuth {
          * This will authorize all requests with credentials where the username begins with 'A' and the password begins
          * with 'secret'. In an actual application you would likely look up some data instead ;-)
          */
-        authorizer: Authorizer;
+        authorizer: Authorizer
     }
 
     interface IAsyncAuthorizerOptions extends IBaseOptions {
         /**
          * Set it to true to use a asynchronous authorizer.
          */
-        authorizeAsync: true;
+        authorizeAsync: true
 
         /**
          * You can pass an asynchronous authorizer. It will be passed a callback as the third parameter, which is
@@ -124,15 +124,14 @@ namespace expressBasicAuth {
          *     app.use(basicAuth({ authorizer, authorizeAsync: true }));
          *
          *     function authorizer(username, password, authorize) {
-         *         if(username.startsWith('A') && password.startsWith('secret')) {
-         *             return authorize(null, true);
-         *         } else {
-         *             return authorize(null, false);
-         *         }
+         *         if(username.startsWith('A') && password.startsWith('secret'))
+         *             return authorize(null, true)
+         *         
+         *         return authorize(null, false)
          *     }
          */
-        authorizer: AsyncAuthorizer;
+        authorizer: AsyncAuthorizer
     }
 }
 
-export = expressBasicAuth;
+export = expressBasicAuth
