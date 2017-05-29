@@ -11,9 +11,9 @@ import { Request, RequestHandler } from 'express'
  *
  * @param options The middleware's options (at least 'users' or 'authorizer' are mandatory).
  */
-function expressBasicAuth(options: expressBasicAuth.BasicAuthMiddlewareOptions): RequestHandler
+declare function expressBasicAuth(options: expressBasicAuth.BasicAuthMiddlewareOptions): RequestHandler
 
-namespace expressBasicAuth {
+declare namespace expressBasicAuth {
     /**
      * The configuration you pass to the middleware can take three forms, either:
      *  - A map of static users ({ bob: 'pa$$w0rd', ... }) ;
