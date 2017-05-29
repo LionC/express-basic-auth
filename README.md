@@ -160,20 +160,20 @@ try out the requests and play around with the options.
 A declaration file is bundled with the library. You don't have to install a `@types/` package.
 
 ```typescript
-import * as basicAuth from 'express-basic-auth';
+import * as basicAuth from 'express-basic-auth'
 ```
 
 :bulb: **Using `req.auth`**
 
-express-basic-auth sets `req.auth` to an object containing `{ user: 'alice', password: '1234' }`.
+express-basic-auth sets `req.auth` to an object containing the authorized credentials like `{ user: 'admin', password: 'supersecret' }`.
 
 In order to use that `req.auth` property in TypeScript without an unknown property error, use covariance to downcast the request type:
 
 ```typescript
 app.use(basicAuth(options), (req: basicAuth.IBasicAuthedRequest, res, next) => {
-    res.end(`Welcome ${req.auth.user} (your password is ${req.auth.password})`);
-    next();
-});
+    res.end(`Welcome ${req.auth.user} (your password is ${req.auth.password})`)
+    next()
+})
 ```
 
 :bulb: **A note about type inference on synchronous authorizers**
@@ -185,7 +185,7 @@ For example, on an asynchronous authorizer, the three arguments are correctly in
 basicAuth({
     authorizeAsync: true,
     authorizer: (user, password, authorize) => authorize(null, password == 'secret')
-});
+})
 ```
 
 However, on a synchronous authorizer, you'll have to type the arguments yourself:
@@ -193,7 +193,7 @@ However, on a synchronous authorizer, you'll have to type the arguments yourself
 ```typescript
 basicAuth({
     authorizer: (user: string, password: string) => (password == 'secret')
-});
+})
 ```
 
 ## Tests
