@@ -5,7 +5,8 @@
   "main": "index.js",
   "types": "express-basic-auth.d.ts",
   "scripts": {
-    "test": "mocha test.js"
+    "check-dts": "tsc express-basic-auth.d.ts",
+    "test": "mocha test.js && npm run check-dts"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "express": "^4.16.1",
     "mocha": "^3.5.0",
     "should": "^11.2.1",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "typescript": "^2.5.3"
   }
 }
