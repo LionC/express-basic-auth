@@ -14,20 +14,20 @@ function ensureFunction(option, defaultValue) {
 function buildMiddleware(options) {
     var challenge = options.challenge != undefined ? !!options.challenge : false
     var users = options.users || {}
-    var authorizer = options.authorizer || staticUsersAuthorizer
     var isAsync = options.authorizeAsync != undefined ? !!options.authorizeAsync : false
     var getResponseBody = ensureFunction(options.unauthorizedResponse, '')
     var realm = ensureFunction(options.realm)
+    var authorizer
 
-    assert(typeof users == 'object', 'Expected an object for the basic auth users, found ' + typeof users + ' instead')
-    assert(typeof authorizer == 'function', 'Expected a function for the basic auth authorizer, found ' + typeof authorizer + ' instead')
-
-    function staticUsersAuthorizer(username, password) {
-        for(var i in users)
-            if(username == i && password == users[i])
-                return true
-
-        return false
+    if(options.hasOwnProperty('users')) {
+        assert(typeof users == 'object', 'Expected an object for the basic auth users, found ' + typeof users + ' instead')
+        assert(!options.authorizer, 'An users object cannot be combined with a custom authorizer')
+        authorizer = function(username, password) {
+            return users.indexOf(username) !== -1 && password === users[username]
+        }
+    } else {
+        assert(typeof options.authorizer == 'function', 'Expected a function for the basic auth authorizer, found ' + typeof authorizer + ' instead')
+        authorizer = options.authorizer
     }
 
     return function authMiddleware(req, res, next) {
