@@ -41,12 +41,12 @@ function buildMiddleware(options) {
             password: authentication.pass
         }
 
-        if(isAsync)
-            return authorizer(authentication.name, authentication.pass, authorizerCallback)
-        else if(authorizer(authentication.name, authentication.pass) !== true)
-            return unauthorized()
+        var authorized = authorizer(authentication.name, authentication.pass, authorizerCallback)
 
-        return next()
+        if(isAsync)
+            return authorized
+
+        return (authorized === true) ? next() : unauthorized()
 
         function unauthorized() {
             if(challenge) {
