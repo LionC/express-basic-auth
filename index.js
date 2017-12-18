@@ -14,7 +14,7 @@ function ensureFunction(option, defaultValue) {
 function buildMiddleware(options) {
     var challenge = options.challenge != undefined ? !!options.challenge : false
     var users = options.users || {}
-    var isAsync = options.authorizeAsync != undefined ? !!options.authorizeAsync : false
+    var isAsync = options.hasOwnProperty(authorizeAsync) && !!options.authorizeAsync
     var getResponseBody = ensureFunction(options.unauthorizedResponse, '')
     var realm = ensureFunction(options.realm)
     var authorizer
