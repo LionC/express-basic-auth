@@ -2,7 +2,7 @@ const auth = require('basic-auth')
 const assert = require('assert')
 
 function ensureFunction(option, defaultValue) {
-    if(option == undefined)
+    if(option === undefined)
         return function() { return defaultValue }
 
     if(typeof option != 'function')
