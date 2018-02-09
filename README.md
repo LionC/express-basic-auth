@@ -5,6 +5,7 @@
 [![David](https://img.shields.io/david/strongloop/express.svg)]()
 ![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+[![CircleCI](https://circleci.com/gh/LionC/express-basic-auth/tree/master.svg?style=svg&circle-token=74f7b1557100b45259e67d2492c263e4f99365d4)](https://circleci.com/gh/LionC/express-basic-auth/tree/master)
 
 Simple plug & play HTTP basic auth middleware for Express.
 
