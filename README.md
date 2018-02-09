@@ -16,16 +16,14 @@ Just run
 npm install express-basic-auth
 ```
 
-add the `--save` option to add it to the `dependencies` in your `package.json` as well
-
 ## How to use
 
 The module will export a function, that you can call with an options object to
 get the middleware:
 
 ```js
-var app = require('express')()
-var basicAuth = require('express-basic-auth')
+const app = require('express')()
+const basicAuth = require('express-basic-auth')
 
 app.use(basicAuth({
     users: { 'admin': 'supersecret' }
@@ -54,7 +52,7 @@ app.use(basicAuth({
     users: {
         'admin': 'supersecret',
         'adam': 'password1234',
-        'eve': 'asdfghjkl'
+        'eve': 'asdfghjkl',
     }
 }))
 ```
@@ -92,11 +90,11 @@ Let's look at the same authorizer again, but this time asynchronous:
 ```js
 app.use(basicAuth({
     authorizer: myAsyncAuthorizer,
-    authorizeAsync: true
+    authorizeAsync: true,
 }))
 
 function myAsyncAuthorizer(username, password, cb) {
-    if(username.startsWith('A') && password.startsWith('secret'))
+    if (username.startsWith('A') && password.startsWith('secret'))
         return cb(null, true)
     else
         return cb(null, false)
@@ -118,9 +116,9 @@ app.use(basicAuth({
 }))
 
 function getUnauthorizedResponse(req) {
-    return req.auth ?
-        ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected') :
-        'No credentials provided'
+    return req.auth
+        ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected')
+        : 'No credentials provided'
 }
 ```
 
@@ -138,7 +136,7 @@ passed the request object and is expected to return the challenge:
 app.use(basicAuth({
     users: { 'someuser': 'somepassword' },
     challenge: true,
-    realm: 'Imb4T3st4pp'
+    realm: 'Imb4T3st4pp',
 }))
 ```
 
@@ -184,7 +182,7 @@ For example, on an asynchronous authorizer, the three arguments are correctly in
 ```typescript
 basicAuth({
     authorizeAsync: true,
-    authorizer: (user, password, authorize) => authorize(null, password == 'secret')
+    authorizer: (user, password, authorize) => authorize(null, password == 'secret'),
 })
 ```
 
