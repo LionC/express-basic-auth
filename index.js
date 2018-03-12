@@ -1,4 +1,5 @@
 const auth = require('basic-auth')
+const crypto = require('crypto');
 const assert = require('assert')
 
 function ensureFunction(option, defaultValue) {
