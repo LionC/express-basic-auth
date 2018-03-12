@@ -24,7 +24,7 @@ function buildMiddleware(options) {
 
     function staticUsersAuthorizer(username, password) {
         for(var i in users)
-            if(username == i && password == users[i])
+            if(compare(username, i) && compare(password, users[i]))
                 return true
 
         return false
@@ -69,13 +69,24 @@ function buildMiddleware(options) {
         }
 
         function authorizerCallback(err, approved) {
-            assert.ifError(err)
+            // Let the authorizer function pass its own error that can be
+            // handled by an error middleware
+            if (err) return next(err);
 
             if(approved)
                 return next()
 
             return unauthorized()
         }
+    }
+}
+
+// A safer compare that protects against timing attacks
+function compare(a, b) {
+    try {
+        return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+    } catch (ex) {
+        return false; // if they arent the same length it throws
     }
 }
 
