@@ -64,7 +64,8 @@ one of the three passed credentials.
 
 Alternatively, you can pass your own `authorizer` function, to check the credentials
 however you want. It will be called with a username and password and is expected to
-return `true` or `false` to indicate that the credentials were approved or not:
+return `true` or `false`, or a `Promise` of `true` or `false` to indicate that the
+credentials were approved or not:
 
 ```js
 app.use(basicAuth( { authorizer: myAuthorizer } ))
@@ -75,8 +76,18 @@ function myAuthorizer(username, password) {
 ```
 
 This will authorize all requests with credentials where the username begins with
-`'A'` and the password begins with `'secret'`. In an actual application you would
-likely look up some data instead ;-)
+`'A'` and the password begins with `'secret'`.
+
+Alternatively, you can use an `async` function or return a promise:
+
+```js
+app.use(basicAuth( { authorizer: myAuthorizer } ))
+
+async function myAuthorizer(username, password) {
+    const user = await database.findUser(username)
+    return user.comparePassword(password)
+}
+```
 
 ### Custom Async Authorization
 
