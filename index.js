@@ -69,7 +69,9 @@ function buildMiddleware(options) {
         }
 
         function authorizerCallback(err, approved) {
-            assert.ifError(err)
+            if (err) {
+                return next(err)
+            }
 
             if(approved)
                 return next()

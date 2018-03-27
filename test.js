@@ -4,6 +4,7 @@ const express = require('express')
 const supertest = require('supertest');
 
 var app = express()
+app.set('env', 'test')
 
 //Requires basic auth with username 'Admin' and password 'secret1234'
 var staticUserAuth = basicAuth({
@@ -98,15 +99,24 @@ app.get('/realmfunction', realmFunctionAuth, function(req, res) {
 
 //Custom authorizer checking if the username starts with 'A' and the password with 'secret'
 function myAuthorizer(username, password) {
-    return username.startsWith('A') && password.startsWith('secret')
+    if(username.startsWith('A') && password.startsWith('secret'))
+        return true
+    else if (username.startsWith('error'))
+        throw new Error('authorizer error')
+    else
+        return false
 }
 
 //Same but asynchronous
 function myAsyncAuthorizer(username, password, cb) {
-    if(username.startsWith('A') && password.startsWith('secret'))
-        return cb(null, true)
-    else
-        return cb(null, false)
+    setTimeout(function () {
+        if(username.startsWith('A') && password.startsWith('secret'))
+            return cb(null, true)
+        else if (username.startsWith('error'))
+            return cb(new Error('authorizer error'))
+        else
+            return cb(null, false)
+    }, 1)
 }
 
 function getUnauthorizedResponse(req) {
@@ -165,6 +175,13 @@ describe('express-basic-auth', function() {
                 .expect(401, done)
         })
 
+        it('should return 500 if authoriser rejects', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('error', 'stuff')
+                .expect(500, done)
+        })
+
         it('should accept fitting credentials', function(done) {
             supertest(app)
                 .get(endpoint)
@@ -187,6 +204,13 @@ describe('express-basic-auth', function() {
                 .get(endpoint)
                 .auth('dude', 'stuff')
                 .expect(401, done)
+        })
+
+        it('should return 500 if authoriser rejects', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('error', 'stuff')
+                .expect(500, done)
         })
 
         it('should accept fitting credentials', function(done) {
