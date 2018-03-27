@@ -31,6 +31,11 @@ var asyncAuth = basicAuth({
     authorizeAsync: true
 })
 
+//Uses a custom promise-based authorizer function
+var promiseAuth = basicAuth({
+    authorizer: myPromiseAuthorizer
+})
+
 //Uses a custom response body function
 var customBodyAuth = basicAuth({
     users: { 'Foo': 'bar' },
@@ -77,6 +82,10 @@ app.get('/async', asyncAuth, function(req, res) {
     res.status(200).send('You passed')
 })
 
+app.get('/promise', promiseAuth, function(req, res) {
+    res.status(200).send('You passed')
+})
+
 app.get('/custombody', customBodyAuth, function(req, res) {
     res.status(200).send('You passed')
 })
@@ -117,6 +126,16 @@ function myAsyncAuthorizer(username, password, cb) {
         else
             return cb(null, false)
     }, 1)
+}
+
+//Same but returns promise
+function myPromiseAuthorizer(username, password) {
+    if(username.startsWith('A') && password.startsWith('secret'))
+        return Promise.resolve(true)
+    else if (username.startsWith('error'))
+        return Promise.reject(new Error('authorizer error'))
+    else
+        return Promise.resolve(false)
 }
 
 function getUnauthorizedResponse(req) {
@@ -192,6 +211,37 @@ describe('express-basic-auth', function() {
 
     describe('async authorizer', function() {
         const endpoint = '/async'
+
+        it('should reject on missing header', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .expect(401, done)
+        })
+
+        it('should reject on wrong credentials', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('dude', 'stuff')
+                .expect(401, done)
+        })
+
+        it('should return 500 if authoriser rejects', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('error', 'stuff')
+                .expect(500, done)
+        })
+
+        it('should accept fitting credentials', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('Aererer', 'secretiveStuff')
+                .expect(200, 'You passed', done)
+        })
+    })
+
+    describe('promise authorizer', function() {
+        const endpoint = '/promise'
 
         it('should reject on missing header', function(done) {
             supertest(app)
