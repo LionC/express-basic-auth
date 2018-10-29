@@ -43,8 +43,20 @@ function buildMiddleware(options) {
 
         if(isAsync)
             return authorizer(authentication.name, authentication.pass, authorizerCallback)
-        else if(!authorizer(authentication.name, authentication.pass))
-            return unauthorized()
+        else {
+            var result = authorizer(authentication.name, authentication.pass)
+            if (result && typeof result.then === 'function') {
+                return result.then(function (isAuthorized) {
+                    authorizerCallback(undefined, isAuthorized)
+                }, function (error) {
+                    authorizerCallback(error)
+                }).catch(function (e) {
+                    console.log('e', e)
+                })
+            } else if (!result) {
+                return unauthorized()
+            }
+        }
 
         return next()
 
@@ -69,7 +81,9 @@ function buildMiddleware(options) {
         }
 
         function authorizerCallback(err, approved) {
-            assert.ifError(err)
+            if (err) {
+                return next(err)
+            }
 
             if(approved)
                 return next()
