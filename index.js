@@ -1,5 +1,6 @@
 const auth = require('basic-auth')
 const assert = require('assert')
+const compare = require('safe-compare');
 
 function ensureFunction(option, defaultValue) {
     if(option == undefined)
@@ -24,7 +25,7 @@ function buildMiddleware(options) {
 
     function staticUsersAuthorizer(username, password) {
         for(var i in users)
-            if(username == i && password == users[i])
+            if(compare(username, i) && compare(password, users[i]))
                 return true
 
         return false
