@@ -71,6 +71,7 @@ return `true` or `false` to indicate that the credentials were approved or not:
 app.use(basicAuth( { authorizer: myAuthorizer } ))
 
 function myAuthorizer(username, password) {
+    // Take care to use a timing attack safe compare function in real code
     return username.startsWith('A') && password.startsWith('secret')
 }
 ```
@@ -78,6 +79,25 @@ function myAuthorizer(username, password) {
 This will authorize all requests with credentials where the username begins with
 `'A'` and the password begins with `'secret'`. In an actual application you would
 likely look up some data instead ;-)
+
+### Timing attacks
+
+When using a custom validation callback, even when comparing hashes, make sure
+to **avoid standard string compare (`==`)**. Use a "constant time compare
+function". This protects you against [timing
+attacks](https://en.wikipedia.org/wiki/Timing_attack).
+
+For example, using
+[safe-compare](https://www.npmjs.com/package/safe-compare):
+
+```js
+const compare = require('safe-compare');
+app.use(basicAuth( { authorizer: myAuthorizer } ))
+
+function myAuthorizer(username, password) {
+    return compare("admin", username) && compare("admin-password", password);
+}
+```
 
 ### Custom Async Authorization
 
