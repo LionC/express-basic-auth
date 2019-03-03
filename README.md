@@ -95,7 +95,7 @@ const compare = require('safe-compare');
 app.use(basicAuth( { authorizer: myAuthorizer } ))
 
 function myAuthorizer(username, password) {
-    return compare("admin", username) && compare("admin-password", password);
+    return compare("admin", username) & compare("admin-password", password);
 }
 ```
 

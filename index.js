@@ -25,7 +25,7 @@ function buildMiddleware(options) {
 
     function staticUsersAuthorizer(username, password) {
         for(var i in users)
-            if(compare(username, i) && compare(password, users[i]))
+            if(compare(username, i) & compare(password, users[i]))
                 return true
 
         return false
