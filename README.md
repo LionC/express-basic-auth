@@ -95,9 +95,15 @@ const compare = require('safe-compare');
 app.use(basicAuth( { authorizer: myAuthorizer } ))
 
 function myAuthorizer(username, password) {
+    // Use non-short-circuiting evaluation to ensure constant time comparison
     return compare("admin", username) & compare("admin-password", password);
 }
 ```
+
+To avoid leaking information about the username, a
+non-[short-circuiting](https://en.wikipedia.org/wiki/Short-circuit_evaluation)
+and operator is used; `&`. This guarantees both username and password are always
+compared.
 
 ### Custom Async Authorization
 
