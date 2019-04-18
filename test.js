@@ -130,6 +130,13 @@ describe('express-basic-auth', function() {
                 .expect(401, done)
         })
 
+        it('should reject on shorter prefix', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('Admin', 'secret')
+                .expect(401, done)
+        })
+
         it('should reject without challenge', function(done) {
             supertest(app)
                 .get(endpoint)
