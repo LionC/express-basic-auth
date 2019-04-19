@@ -1,7 +1,8 @@
 const should = require('should')
-const basicAuth = require('./index.js')
 const express = require('express')
-const supertest = require('supertest');
+const supertest = require('supertest')
+
+const basicAuth = require('./index.js')
 
 var app = express()
 
