@@ -2,6 +2,8 @@ const auth = require('basic-auth')
 const assert = require('assert')
 const timingSafeEqual = require('crypto').timingSafeEqual
 
+// Credits for the actual algorithm go to github/@Bruce17
+// Thanks to github/@hraban for making me implement this
 function safeCompare(userInput, secret) {
     const userInputLength = Buffer.byteLength(userInput)
     const secretLength = Buffer.byteLength(secret)
