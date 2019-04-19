@@ -94,4 +94,5 @@ function buildMiddleware(options) {
     }
 }
 
+buildMiddleware.safeCompare = safeCompare
 module.exports = buildMiddleware
