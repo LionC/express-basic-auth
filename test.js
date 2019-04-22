@@ -1,7 +1,8 @@
 const should = require('should')
-const basicAuth = require('./index.js')
 const express = require('express')
-const supertest = require('supertest');
+const supertest = require('supertest')
+
+const basicAuth = require('./index.js')
 
 var app = express()
 
@@ -16,6 +17,11 @@ var staticUserAuth = basicAuth({
 //Uses a custom (synchronous) authorizer function
 var customAuthorizerAuth = basicAuth({
     authorizer: myAuthorizer
+})
+
+//Uses a custom (synchronous) authorizer function
+var customCompareAuth = basicAuth({
+    authorizer: myComparingAuthorizer
 })
 
 //Same, but sends a basic auth challenge header when authorization fails
@@ -68,6 +74,10 @@ app.get('/custom', customAuthorizerAuth, function(req, res) {
     res.status(200).send('You passed')
 })
 
+app.get('/custom-compare', customCompareAuth, function(req, res) {
+    res.status(200).send('You passed')
+})
+
 app.get('/challenge', challengeAuth, function(req, res) {
     res.status(200).send('You passed')
 })
@@ -109,11 +119,31 @@ function myAsyncAuthorizer(username, password, cb) {
         return cb(null, false)
 }
 
+function myComparingAuthorizer(username, password) {
+    return basicAuth.safeCompare(username, 'Testeroni') & basicAuth.safeCompare(password, 'testsecret')
+}
+
 function getUnauthorizedResponse(req) {
     return req.auth ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected') : 'No credentials provided'
 }
 
 describe('express-basic-auth', function() {
+    describe('safe compare', function() {
+        const safeCompare = basicAuth.safeCompare
+
+        it('should return false on different inputs', function() {
+            (!!safeCompare('asdf', 'rftghe')).should.be.false()
+        })
+
+        it('should return false on prefix inputs', function() {
+            (!!safeCompare('some', 'something')).should.be.false()
+        })
+
+        it('should return false on different inputs', function() {
+            (!!safeCompare('anothersecret', 'anothersecret')).should.be.true()
+        })
+    })
+
     describe('static users', function() {
         const endpoint = '/static'
 
@@ -127,6 +157,13 @@ describe('express-basic-auth', function() {
             supertest(app)
                 .get(endpoint)
                 .auth('dude', 'stuff')
+                .expect(401, done)
+        })
+
+        it('should reject on shorter prefix', function(done) {
+            supertest(app)
+                .get(endpoint)
+                .auth('Admin', 'secret')
                 .expect(401, done)
         })
 
@@ -170,6 +207,31 @@ describe('express-basic-auth', function() {
                 .get(endpoint)
                 .auth('Aloha', 'secretverymuch')
                 .expect(200, 'You passed', done)
+        })
+
+        describe('with safe compare', function() {
+            const endpoint = '/custom-compare'
+            
+            it('should reject wrong credentials', function(done) {
+                supertest(app)
+                    .get(endpoint)
+                    .auth('bla', 'blub')
+                    .expect(401, done)
+            })
+
+            it('should reject prefix credentials', function(done) {
+                supertest(app)
+                    .get(endpoint)
+                    .auth('Test', 'test')
+                    .expect(401, done)
+            })
+
+            it('should accept fitting credentials', function(done) {
+                supertest(app)
+                    .get(endpoint)
+                    .auth('Testeroni', 'testsecret')
+                    .expect(200, 'You passed', done)
+            })
         })
     })
 

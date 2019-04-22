@@ -1,5 +1,20 @@
 const auth = require('basic-auth')
 const assert = require('assert')
+const timingSafeEqual = require('crypto').timingSafeEqual
+
+// Credits for the actual algorithm go to github/@Bruce17
+// Thanks to github/@hraban for making me implement this
+function safeCompare(userInput, secret) {
+    const userInputLength = Buffer.byteLength(userInput)
+    const secretLength = Buffer.byteLength(secret)
+
+    const userInputBuffer = Buffer.alloc(userInputLength, 0, 'utf8')
+    userInputBuffer.write(userInput)
+    const secretBuffer = Buffer.alloc(userInputLength, 0, 'utf8')
+    secretBuffer.write(secret)
+
+    return !!(timingSafeEqual(userInputBuffer, secretBuffer) & userInputLength === secretLength)
+}
 
 function ensureFunction(option, defaultValue) {
     if(option == undefined)
@@ -24,7 +39,7 @@ function buildMiddleware(options) {
 
     function staticUsersAuthorizer(username, password) {
         for(var i in users)
-            if(username == i && password == users[i])
+            if(safeCompare(username, i) & safeCompare(password, users[i]))
                 return true
 
         return false
@@ -79,4 +94,5 @@ function buildMiddleware(options) {
     }
 }
 
+buildMiddleware.safeCompare = safeCompare
 module.exports = buildMiddleware

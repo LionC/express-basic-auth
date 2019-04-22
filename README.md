@@ -65,19 +65,30 @@ one of the three passed credentials.
 
 Alternatively, you can pass your own `authorizer` function, to check the credentials
 however you want. It will be called with a username and password and is expected to
-return `true` or `false` to indicate that the credentials were approved or not:
+return `true` or `false` to indicate that the credentials were approved or not.
+
+When using your own `authorizer`, make sure **not to use standard string comparison (`==` / `===`)**
+when comparing user input with secret credentials, as that would make you vulnerable against
+[timing attacks](https://en.wikipedia.org/wiki/Timing_attack). Use the provided `safeCompare`
+function instead - always provide the user input as its first argument. Also make sure to use bitwise
+logic operators (`|` and `&`) instead of the standard ones (`||` and `&&`) for the same reason, as
+the standard ones use shortcuts.
 
 ```js
 app.use(basicAuth( { authorizer: myAuthorizer } ))
 
 function myAuthorizer(username, password) {
-    return username.startsWith('A') && password.startsWith('secret')
+    const userMatches = basicAuth.safeCompare(username, 'customuser')
+    const passwordMatches = basicAuth.safeCompare(password, 'custompassword')
+
+    return userMatches & passwordMatches
 }
 ```
 
-This will authorize all requests with credentials where the username begins with
-`'A'` and the password begins with `'secret'`. In an actual application you would
-likely look up some data instead ;-)
+This will authorize all requests with the credentials 'customuser:custompassword'.
+In an actual application you would likely look up some data instead ;-) You can do whatever you
+want in custom authorizers, just return `true` or `false` in the end and stay aware of timing
+attacks.
 
 ### Custom Async Authorization
 
@@ -95,7 +106,7 @@ app.use(basicAuth({
 }))
 
 function myAsyncAuthorizer(username, password, cb) {
-    if (username.startsWith('A') && password.startsWith('secret'))
+    if (username.startsWith('A') & password.startsWith('secret'))
         return cb(null, true)
     else
         return cb(null, false)
