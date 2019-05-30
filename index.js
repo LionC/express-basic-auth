@@ -31,7 +31,7 @@ function buildMiddleware(options) {
     var users = options.users || {}
     var authorizer = options.authorizer || staticUsersAuthorizer
     var isAsync = options.authorizeAsync != undefined ? !!options.authorizeAsync : false
-    var getResponseBody = ensureFunction(options.unauthorizedResponse, '')
+    var handleUnauthorizedResponse = ensureFunction(options.unauthorizedResponse, '')
     var realm = ensureFunction(options.realm)
 
     assert(typeof users == 'object', 'Expected an object for the basic auth users, found ' + typeof users + ' instead')
@@ -74,13 +74,15 @@ function buildMiddleware(options) {
                 res.set('WWW-Authenticate', challengeString)
             }
 
-            //TODO: Allow response body to be JSON (maybe autodetect?)
-            const response = getResponseBody(req)
+            const response = handleUnauthorizedResponse(req, res, next)
+            // check for sync response, including '' which is the default body
+            if (response || '' === response) {
+                if(typeof response == 'string')
+                    return res.status(401).send(response)
 
-            if(typeof response == 'string')
-                return res.status(401).send(response)
-
-            return res.status(401).json(response)
+                return res.status(401).json(response)
+            }
+            // if otherwise falsy response, assume handled as middleware and let it go
         }
 
         function authorizerCallback(err, approved) {
