@@ -52,6 +52,13 @@ var jsonBodyAuth = basicAuth({
     unauthorizedResponse: { foo: 'bar' }
 })
 
+//Uses an unauthorized response middleware
+var unauthorizedResponseMiddleware = basicAuth({
+    unauthorizedResponse: function(req, res, next) {
+        return res.status(200).send('This status code deceives you.');
+    }
+});
+
 //Uses a custom realm
 var realmAuth = basicAuth({
     challenge: true,
@@ -95,6 +102,10 @@ app.get('/staticbody', staticBodyAuth, function(req, res) {
 })
 
 app.get('/jsonbody', jsonBodyAuth, function(req, res) {
+    res.status(200).send('You passed')
+})
+
+app.get('/unauthorizedresponsemiddleware', unauthorizedResponseMiddleware, function(req, res) {
     res.status(200).send('You passed')
 })
 
@@ -211,7 +222,7 @@ describe('express-basic-auth', function() {
 
         describe('with safe compare', function() {
             const endpoint = '/custom-compare'
-            
+
             it('should reject wrong credentials', function(done) {
                 supertest(app)
                     .get(endpoint)
@@ -290,6 +301,12 @@ describe('express-basic-auth', function() {
             supertest(app)
             .get('/jsonbody')
             .expect(401, { foo: 'bar' }, done)
+        })
+
+        it('should reject and use custom response middleware', function(done) {
+            supertest(app)
+            .get('/unauthorizedresponsemiddleware')
+            .expect(200, 'This status code deceives you.', done)
         })
     })
 

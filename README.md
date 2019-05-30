@@ -116,22 +116,59 @@ function myAsyncAuthorizer(username, password, cb) {
 ### Unauthorized Response Body
 
 Per default, the response body for unauthorized responses will be empty. It can
-be configured using the `unauthorizedResponse` option. You can either pass a
-static response or a function that gets passed the express request object and is
-expected to return the response body. If the response body is a string, it will
-be used as-is, otherwise it will be sent as JSON:
+be configured using the `unauthorizedResponse` option.
+
+You can pass one of the following:
+
+- a static value (string or object)
+- a function that synchronously returns a value (string or object)
+- a middleware
+
+If a string value is returned or produced by the function, it will be
+sent as-is as the response along with a 401 status code. Ohterwise,
+it will be sent as json via the `.json` method.
+
 
 ```js
+
+// static value
 app.use(basicAuth({
     users: { 'Foo': 'bar' },
-    unauthorizedResponse: getUnauthorizedResponse
+    unauthorizedResponse: 'Sorry, you are not authorized.'
 }))
 
-function getUnauthorizedResponse(req) {
-    return req.auth
-        ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected')
-        : 'No credentials provided'
-}
+// a function that synchronously returns a value
+app.use(basicAuth({
+    users: { 'Foo': 'bar' },
+    unauthorizedResponse: function (req) {
+        return req.auth
+            ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected')
+            : 'No credentials provided'
+    }
+}))
+
+// a middleware
+app.use(basicAuth({
+    users: { 'Foo': 'bar' },
+    unauthorizedResponse: function (req, res, next) {
+      if (req.auth) {
+          next(new Error('Login required'));
+          return;
+      }
+      // or send an html page
+      if (req.accepts('html') {
+          res.render('unauthorized');
+          return;
+      }
+      // or whatever you like!
+      res.status(403)
+          .set('X-Toynbee-Idea', 'In Kubrick’s 2001 Resurrect Dead On Planet Jupiter')
+          .send({
+            message: 'Future authorization attempts are futile.'
+          });
+    }
+}))
+
 ```
 
 ### Challenge

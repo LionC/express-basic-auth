@@ -31,7 +31,7 @@ function buildMiddleware(options) {
     var users = options.users || {}
     var authorizer = options.authorizer || staticUsersAuthorizer
     var isAsync = options.authorizeAsync != undefined ? !!options.authorizeAsync : false
-    var getResponseBody = ensureFunction(options.unauthorizedResponse, '')
+    var handleUnauthorizedResponse = ensureFunction(options.unauthorizedResponse, '')
     var realm = ensureFunction(options.realm)
 
     assert(typeof users == 'object', 'Expected an object for the basic auth users, found ' + typeof users + ' instead')
@@ -74,9 +74,32 @@ function buildMiddleware(options) {
                 res.set('WWW-Authenticate', challengeString)
             }
 
-            //TODO: Allow response body to be JSON (maybe autodetect?)
-            const response = getResponseBody(req)
+            // normally we can assume no value returned means using a middleware
+            // but this check is needed in case they follow the
+            // `return res.send();`
+            // pattern
+            function isFinishedExpressResponse(res) {
+              if (!res) {
+                return false;
+              }
+              // ServerResponse type indicates they reutnred res or res.something()
+              // which indicates a middleware in use
+              if (!res.constructor || -1 === res.constructor.toString().indexOf('ServerResponse')) {
+                return false;
+              }
+              // NOTE: this will never send a response if they forgot to call .send()
+              return true;
+            }
 
+            const response = handleUnauthorizedResponse(req, res, next)
+            // if no response, assume middleware
+            if ((!response && response !== '') || isFinishedExpressResponse(response)) {
+                // already fully handled as middleware and let it go
+                return;
+            }
+
+            // sync response, including '' which is the default body
+            // so just send that value
             if(typeof response == 'string')
                 return res.status(401).send(response)
 
