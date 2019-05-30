@@ -55,7 +55,7 @@ var jsonBodyAuth = basicAuth({
 //Uses an unauthorized response middleware
 var unauthorizedResponseMiddleware = basicAuth({
     unauthorizedResponse: function(req, res, next) {
-        res.status(200).send('This status code deceives you.');
+        return res.status(200).send('This status code deceives you.');
     }
 });
 

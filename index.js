@@ -74,15 +74,36 @@ function buildMiddleware(options) {
                 res.set('WWW-Authenticate', challengeString)
             }
 
-            const response = handleUnauthorizedResponse(req, res, next)
-            // check for sync response, including '' which is the default body
-            if (response || '' === response) {
-                if(typeof response == 'string')
-                    return res.status(401).send(response)
-
-                return res.status(401).json(response)
+            // normally we can assume no value returned means using a middleware
+            // but this check is needed in case they follow the
+            // `return res.send();`
+            // pattern
+            function isFinishedExpressResponse(res) {
+              if (!res) {
+                return false;
+              }
+              // ServerResponse type indicates they reutnred res or res.something()
+              // which indicates a middleware in use
+              if (!res.constructor || -1 === res.constructor.toString().indexOf('ServerResponse')) {
+                return false;
+              }
+              // NOTE: this will never send a response if they forgot to call .send()
+              return true;
             }
-            // if otherwise falsy response, assume handled as middleware and let it go
+
+            const response = handleUnauthorizedResponse(req, res, next)
+            // if no response, assume middleware
+            if ((!response && response !== '') || isFinishedExpressResponse(response)) {
+                // already fully handled as middleware and let it go
+                return;
+            }
+
+            // sync response, including '' which is the default body
+            // so just send that value
+            if(typeof response == 'string')
+                return res.status(401).send(response)
+
+            return res.status(401).json(response)
         }
 
         function authorizerCallback(err, approved) {
