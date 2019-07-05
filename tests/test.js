@@ -114,18 +114,24 @@ function myAuthorizer(username, password) {
 
 //Same but asynchronous
 function myAsyncAuthorizer(username, password, cb) {
-    if(username.startsWith('A') && password.startsWith('secret'))
+    if(username.startsWith('A') && password.startsWith('secret')) {
         return cb(null, true);
-    else
+    } else {
         return cb(null, false);
+    }
 }
 
 function myComparingAuthorizer(username, password) {
-    return basicAuth.safeCompare(username, 'Testeroni') & basicAuth.safeCompare(password, 'testsecret');
+    return (
+        basicAuth.safeCompare(username, 'Testeroni') &
+        basicAuth.safeCompare(password, 'testsecret')
+    );
 }
 
 function getUnauthorizedResponse(req) {
-    return req.auth ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected') : 'No credentials provided';
+    return req.auth
+        ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected')
+        : 'No credentials provided';
 }
 
 describe('express-basic-auth', function() {
