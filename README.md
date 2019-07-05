@@ -1,4 +1,4 @@
-# express-basic-auth
+# basic-auth-4-express
 
 [![npm version](https://badge.fury.io/js/express-basic-auth.svg)](https://badge.fury.io/js/express-basic-auth)
 [![npm](https://img.shields.io/npm/dm/express-basic-auth.svg)]()
@@ -7,7 +7,8 @@
 ![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-Simple plug & play HTTP basic auth middleware for Express.
+Simple plug & play HTTP basic auth middleware for Express (based on 
+[express-basic-auth](https://github.com/LionC/express-basic-auth)).
 
 ## How to install
 

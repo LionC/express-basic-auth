@@ -1,16 +1,16 @@
 {
-  "name": "express-basic-auth",
-  "version": "1.2.0",
+  "name": "basic-auth-4-express",
+  "version": "1.0.0",
   "description": "Plug & play basic auth middleware for express",
   "main": "index.js",
-  "types": "express-basic-auth.d.ts",
+  "types": "basic-auth-4-express.d.ts",
   "scripts": {
-    "check-dts": "tsc express-basic-auth.d.ts",
+    "check-dts": "tsc basic-auth-4-express.d.ts",
     "test": "mocha test.js && npm run check-dts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LionC/express-basic-auth.git"
+    "url": "git+https://github.com/castarco/basic-auth-4-express.git"
   },
   "keywords": [
     "express",
@@ -20,21 +20,24 @@
     "authentication",
     "http"
   ],
-  "author": "LionC <me@lionc.de>",
+  "author": "Andrés Correa Casablanca <castarco@gmail.com>",
+  "contributors": [
+    "LionC <me@lionc.de>"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/LionC/express-basic-auth/issues"
+    "url": "https://github.com/castarco/basic-auth-4-express/issues"
   },
-  "homepage": "https://github.com/LionC/express-basic-auth#readme",
+  "homepage": "https://github.com/castarco/basic-auth-4-express#readme",
   "dependencies": {
     "basic-auth": "^2.0.1"
   },
   "devDependencies": {
-    "@types/express": "^4.16.0",
-    "express": "^4.16.4",
-    "mocha": "^5.2.0",
-    "should": "^11.2.1",
-    "supertest": "^3.3.0",
-    "typescript": "^2.9.2"
+    "@types/express": "^4.17.0",
+    "express": "^4.17.1",
+    "mocha": "^6.1.4",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2",
+    "typescript": "^3.5.2"
   }
 }
