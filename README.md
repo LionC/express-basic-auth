@@ -1,8 +1,7 @@
 # basic-auth-4-express
 
-[![npm version](https://badge.fury.io/js/express-basic-auth.svg)](https://badge.fury.io/js/express-basic-auth)
-[![npm](https://img.shields.io/npm/dm/express-basic-auth.svg)]()
-[![CircleCI](https://circleci.com/gh/LionC/express-basic-auth/tree/master.svg?style=shield&circle-token=74f7b1557100b45259e67d2492c263e4f99365d4)](https://circleci.com/gh/LionC/express-basic-auth/tree/master)
+[![npm version](https://badge.fury.io/js/basic-auth-4-express.svg)](https://badge.fury.io/js/basic-auth-4-express)
+[![npm](https://img.shields.io/npm/dm/basic-auth-4-express.svg)]()
 [![David](https://img.shields.io/david/strongloop/express.svg)]()
 ![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
@@ -15,7 +14,7 @@ Simple plug & play HTTP basic auth middleware for Express (based on
 Just run
 
 ```shell
-npm install express-basic-auth
+npm install basic-auth-4-express
 ```
 
 ## How to use
@@ -25,7 +24,7 @@ get the middleware:
 
 ```js
 const app = require('express')()
-const basicAuth = require('express-basic-auth')
+const basicAuth = require('basic-auth-4-express')
 
 app.use(basicAuth({
     users: { 'admin': 'supersecret' }
@@ -171,7 +170,7 @@ try out the requests and play around with the options.
 A declaration file is bundled with the library. You don't have to install a `@types/` package.
 
 ```typescript
-import * as basicAuth from 'express-basic-auth'
+import * as basicAuth from 'basic-auth-4-express'
 ```
 
 :bulb: **Using `req.auth`**
