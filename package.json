@@ -2,11 +2,13 @@
   "name": "spresso-authy",
   "version": "1.0.0",
   "description": "Plug & play basic auth middleware for express",
-  "main": "index.js",
-  "types": "spresso-authy.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/spresso-authy.d.ts",
   "scripts": {
-    "check-dts": "tsc spresso-authy.d.ts",
-    "test": "mocha test.js && npm run check-dts"
+    "check-dts": "tsc lib/spresso-authy.d.ts",
+    "lint": "./node_modules/eslint/bin/eslint.js .",
+    "test-lite": "mocha tests/*.js",
+    "test": "npm run test-lite && npm run check-dts && npm run lint"
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.0",
+    "eslint": "^6.0.1",
     "express": "^4.17.1",
     "mocha": "^6.1.4",
     "should": "^13.2.3",

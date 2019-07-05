@@ -158,7 +158,7 @@ The repository contains an `example.js` that you can run to play around and try
 the middleware. To use it just put it somewhere (or leave it where it is), run
 
 ```shell
-npm install express express-basic-auth
+npm install express spresso-authy
 node example.js
 ```
 
