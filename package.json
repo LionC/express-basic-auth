@@ -1,16 +1,16 @@
 {
-  "name": "basic-auth-4-express",
+  "name": "spresso-authy",
   "version": "1.0.0",
   "description": "Plug & play basic auth middleware for express",
   "main": "index.js",
-  "types": "basic-auth-4-express.d.ts",
+  "types": "spresso-authy.d.ts",
   "scripts": {
-    "check-dts": "tsc basic-auth-4-express.d.ts",
+    "check-dts": "tsc spresso-authy.d.ts",
     "test": "mocha test.js && npm run check-dts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/castarco/basic-auth-4-express.git"
+    "url": "git+https://github.com/castarco/spresso-authy.git"
   },
   "keywords": [
     "express",
@@ -22,13 +22,14 @@
   ],
   "author": "Andrés Correa Casablanca <castarco@gmail.com>",
   "contributors": [
+    "Andrés Correa Casablanca <castarco@gmail.com>",
     "LionC <me@lionc.de>"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/castarco/basic-auth-4-express/issues"
+    "url": "https://github.com/castarco/spresso-authy/issues"
   },
-  "homepage": "https://github.com/castarco/basic-auth-4-express#readme",
+  "homepage": "https://github.com/castarco/spresso-authy#readme",
   "dependencies": {
     "basic-auth": "^2.0.1"
   },

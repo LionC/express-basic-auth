@@ -1,7 +1,7 @@
-# basic-auth-4-express
+# spresso-authy
 
-[![npm version](https://badge.fury.io/js/basic-auth-4-express.svg)](https://badge.fury.io/js/basic-auth-4-express)
-[![npm](https://img.shields.io/npm/dm/basic-auth-4-express.svg)]()
+[![npm version](https://badge.fury.io/js/spresso-authy.svg)](https://badge.fury.io/js/spresso-authy)
+[![npm](https://img.shields.io/npm/dm/spresso-authy.svg)]()
 [![David](https://img.shields.io/david/strongloop/express.svg)]()
 ![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
@@ -14,7 +14,7 @@ Simple plug & play HTTP basic auth middleware for Express (based on
 Just run
 
 ```shell
-npm install basic-auth-4-express
+npm install spresso-authy
 ```
 
 ## How to use
@@ -24,7 +24,7 @@ get the middleware:
 
 ```js
 const app = require('express')()
-const basicAuth = require('basic-auth-4-express')
+const basicAuth = require('spresso-authy')
 
 app.use(basicAuth({
     users: { 'admin': 'supersecret' }
@@ -170,7 +170,7 @@ try out the requests and play around with the options.
 A declaration file is bundled with the library. You don't have to install a `@types/` package.
 
 ```typescript
-import * as basicAuth from 'basic-auth-4-express'
+import * as basicAuth from 'spresso-authy'
 ```
 
 :bulb: **Using `req.auth`**
