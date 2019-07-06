@@ -1,6 +1,6 @@
 {
   "name": "spresso-authy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Plug & play basic auth middleware for express",
   "main": "lib/index.js",
   "types": "lib/spresso-authy.d.ts",
