@@ -33,6 +33,7 @@ function buildMiddleware(options) {
     var isAsync = options.authorizeAsync != undefined ? !!options.authorizeAsync : false
     var getResponseBody = ensureFunction(options.unauthorizedResponse, '')
     var realm = ensureFunction(options.realm)
+    var headerKey = options.headerKey
 
     assert(typeof users == 'object', 'Expected an object for the basic auth users, found ' + typeof users + ' instead')
     assert(typeof authorizer == 'function', 'Expected a function for the basic auth authorizer, found ' + typeof authorizer + ' instead')
@@ -46,7 +47,14 @@ function buildMiddleware(options) {
     }
 
     return function authMiddleware(req, res, next) {
-        var authentication = auth(req)
+
+
+        var authentication;
+        
+        if(headerKey) 
+            authentication = auth.parse(req.headers[headerKey])
+        else
+        authentication = auth(req)
 
         if(!authentication)
             return unauthorized()

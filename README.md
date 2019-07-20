@@ -151,6 +151,16 @@ app.use(basicAuth({
     realm: 'Imb4T3st4pp',
 }))
 ```
+### Custom authorization header key
+
+By default this package checks "authorization" key in request header to parse user and password from.
+you can pass different headerKey in options.
+
+app.use(basicAuth({
+    users: { 'someuser': 'somepassword' },
+    headerKey: 'custom-key-to-check'
+}))
+
 
 ## Try it
 
