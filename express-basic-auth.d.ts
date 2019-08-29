@@ -149,3 +149,14 @@ declare namespace expressBasicAuth {
 }
 
 export = expressBasicAuth
+
+declare global {
+    namespace Express {
+        export interface Request {
+            auth: {
+                user: string,
+                password: string,
+            }
+        }
+    }
+}
