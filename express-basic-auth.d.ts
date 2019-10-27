@@ -1,6 +1,6 @@
 /// <reference types="express" />
 
-import { Request, RequestHandler } from 'express'
+import { Request, RequestHandler, Response } from 'express'
 
 /**
  * This is the middleware builder.
@@ -16,14 +16,14 @@ declare function expressBasicAuth(options: expressBasicAuth.BasicAuthMiddlewareO
 declare namespace expressBasicAuth {
     /**
      * Time safe string comparison function to protect against timing attacks.
-     * 
+     *
      * It is important to provide the arguments in the correct order, as the runtime
      * depends only on the `userInput` argument. Switching the order would expose the `secret`
      * to timing attacks.
-     * 
+     *
      * @param userInput The user input to be compared
      * @param secret The secret value the user input should be compared with
-     * 
+     *
      * @returns true if `userInput` matches `secret`, false if not
      */
     export function safeCompare(userInput: string, secret: string): boolean
@@ -46,7 +46,15 @@ declare namespace expressBasicAuth {
      *     })
      */
     export interface IBasicAuthedRequest extends Request {
-        auth: { user: string, password: string }
+        auth?: { user: string, password: string }
+    }
+
+    export interface IUnauthorizeOptions {
+        challenge: boolean;
+        getResponseBody: any;
+        req: IBasicAuthedRequest;
+        realm: any;
+        res: Response;
     }
 
     type Authorizer = (username: string, password: string) => boolean
@@ -140,7 +148,7 @@ declare namespace expressBasicAuth {
          *     function authorizer(username, password, authorize) {
          *         if(username.startsWith('A') && password.startsWith('secret'))
          *             return authorize(null, true)
-         *         
+         *
          *         return authorize(null, false)
          *     }
          */
