@@ -1,5 +1,5 @@
 {
-  "name": "express-basic-auth",
+  "name": "@blossomfinance/express-basic-auth",
   "version": "1.2.0",
   "description": "Plug & play basic auth middleware for express",
   "main": "index.js",
