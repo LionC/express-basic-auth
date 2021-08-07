@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LionC/express-basic-auth.git"
+    "url": "git+https://github.com/matmar10/express-basic-auth.git"
   },
   "keywords": [
     "express",
@@ -22,6 +22,10 @@
     "http"
   ],
   "author": "LionC <me@lionc.de>",
+  "contributors": [
+    "LionC <me@lionc.de> (https://github.com/LionC)",
+    "Matthew Martin <matthew.mar10@gmail.com> (https://github.com/matmar10)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/LionC/express-basic-auth/issues"
