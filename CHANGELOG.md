@@ -1,3 +1,15 @@
+### [1.3.3](https://github.com/matmar10/express-basic-auth/compare/v1.3.2...v1.3.3) (2021-08-07)
+
+
+### Continuous Integration
+
+* remove typescript compiler check from build test ([2579b12](https://github.com/matmar10/express-basic-auth/commit/2579b125f2ccf376b32cd04376a1b11f48761378))
+
+
+### Documentation
+
+* update badges to new forked repo ([3ac09ed](https://github.com/matmar10/express-basic-auth/commit/3ac09ed68d12177edc14b257bfb7756d3256fad3))
+
 ### [1.3.2](https://github.com/matmar10/express-basic-auth/compare/v1.3.1...v1.3.2) (2021-08-07)
 
 
