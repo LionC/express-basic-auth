@@ -29,6 +29,7 @@ function ensureFunction(option, defaultValue) {
 function buildMiddleware(options) {
     var challenge = options.challenge != undefined ? !!options.challenge : false
     var users = options.users || {}
+    var proxyAuth = options.proxyAuth || false
     var authorizer = options.authorizer || staticUsersAuthorizer
     var isAsync = options.authorizeAsync != undefined ? !!options.authorizeAsync : false
     var getResponseBody = ensureFunction(options.unauthorizedResponse, '')
@@ -46,7 +47,7 @@ function buildMiddleware(options) {
     }
 
     return function authMiddleware(req, res, next) {
-        var authentication = auth(req)
+        var authentication = proxyAuth? auth.parse(req.getHeader('Proxy-Authorization')) : auth(req)
 
         if(!authentication)
             return unauthorized()
