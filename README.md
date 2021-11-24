@@ -2,6 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/express-basic-auth.svg)](https://badge.fury.io/js/express-basic-auth)
 [![npm](https://img.shields.io/npm/dm/express-basic-auth.svg)]()
+[![CircleCI](https://circleci.com/gh/LionC/express-basic-auth/tree/master.svg?style=shield&circle-token=74f7b1557100b45259e67d2492c263e4f99365d4)](https://circleci.com/gh/LionC/express-basic-auth/tree/master)
 [![David](https://img.shields.io/david/strongloop/express.svg)]()
 ![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
@@ -64,30 +65,32 @@ one of the three passed credentials.
 
 Alternatively, you can pass your own `authorizer` function, to check the credentials
 however you want. It will be called with a username and password and is expected to
-return `true` or `false`, or a `Promise` of `true` or `false` to indicate that the
-credentials were approved or not:
+return `true` or `false` to indicate that the credentials were approved or not. You
+can also return a `Promise` resolving to `true` or `false`.
+
+When using your own `authorizer`, make sure **not to use standard string comparison (`==` / `===`)**
+when comparing user input with secret credentials, as that would make you vulnerable against
+[timing attacks](https://en.wikipedia.org/wiki/Timing_attack). Use the provided `safeCompare`
+function instead - always provide the user input as its first argument. Also make sure to use bitwise
+logic operators (`|` and `&`) instead of the standard ones (`||` and `&&`) for the same reason, as
+the standard ones use shortcuts.
 
 ```js
 app.use(basicAuth( { authorizer: myAuthorizer } ))
 
 function myAuthorizer(username, password) {
-    return username.startsWith('A') && password.startsWith('secret')
+    const userMatches = basicAuth.safeCompare(username, 'customuser')
+    const passwordMatches = basicAuth.safeCompare(password, 'custompassword')
+
+    return userMatches & passwordMatches
 }
 ```
 
-This will authorize all requests with credentials where the username begins with
-`'A'` and the password begins with `'secret'`.
+This will authorize all requests with the credentials 'customuser:custompassword'.
 
-Alternatively, you can use an `async` function or return a promise:
-
-```js
-app.use(basicAuth( { authorizer: myAuthorizer } ))
-
-async function myAuthorizer(username, password) {
-    const user = await database.findUser(username)
-    return user.comparePassword(password)
-}
-```
+In an actual application you would likely look up some data instead ;-) You can do whatever you
+want in custom authorizers, just return `true`, `false` or a `Promise` resolving to `true` or `false`
+in the end and stay aware of timing attacks.
 
 ### Custom Async Authorization
 
@@ -105,7 +108,7 @@ app.use(basicAuth({
 }))
 
 function myAsyncAuthorizer(username, password, cb) {
-    if (username.startsWith('A') && password.startsWith('secret'))
+    if (username.startsWith('A') & password.startsWith('secret'))
         return cb(null, true)
     else
         return cb(null, false)

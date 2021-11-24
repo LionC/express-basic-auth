@@ -15,6 +15,20 @@ declare function expressBasicAuth(options: expressBasicAuth.BasicAuthMiddlewareO
 
 declare namespace expressBasicAuth {
     /**
+     * Time safe string comparison function to protect against timing attacks.
+     * 
+     * It is important to provide the arguments in the correct order, as the runtime
+     * depends only on the `userInput` argument. Switching the order would expose the `secret`
+     * to timing attacks.
+     * 
+     * @param userInput The user input to be compared
+     * @param secret The secret value the user input should be compared with
+     * 
+     * @returns true if `userInput` matches `secret`, false if not
+     */
+    export function safeCompare(userInput: string, secret: string): boolean
+
+    /**
      * The configuration you pass to the middleware can take three forms, either:
      *  - A map of static users ({ bob: 'pa$$w0rd', ... }) ;
      *  - An authorizer function
