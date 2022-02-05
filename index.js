@@ -59,7 +59,7 @@ function buildMiddleware(options) {
         if(isAsync)
             return authorizer(authentication.name, authentication.pass, authorizerCallback)
         else if(!authorizer(authentication.name, authentication.pass))
-            return unauthorized()
+            return forbidden()
 
         return next()
 
@@ -82,14 +82,19 @@ function buildMiddleware(options) {
 
             return res.status(401).json(response)
         }
-
+        function forbidden() {
+            const response = getResponseBody(req)
+            if(typeof response == "string")
+                return res.status(403).send(response)
+            return res.status(403).json(response)
+        }
         function authorizerCallback(err, approved) {
             assert.ifError(err)
 
             if(approved)
                 return next()
 
-            return unauthorized()
+            return forbidden()
         }
     }
 }
