@@ -106,7 +106,7 @@ app.use(basicAuth({
 }))
 
 function myAsyncAuthorizer(username, password, cb) {
-    if (username.startsWith('A') & password.startsWith('secret'))
+    if (username.startsWith('A') && password.startsWith('secret'))
         return cb(null, true)
     else
         return cb(null, false)
