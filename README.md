@@ -152,6 +152,24 @@ app.use(basicAuth({
 }))
 ```
 
+### Adding to a router
+It's also possible to add `basicAuth` directly into a `router`.
+That's useful when you have the app in one file and your routes on it's individual files.
+
+```js
+const express = require('express')
+const router = express.Router()
+
+const authorizer = basicAuth({
+    authorizer: myAsyncAuthorizer,
+    authorizeAsync: true,
+})
+
+router.get('/some-route', authorizer, (req, res) => {
+    res.send('Birds home page')
+})
+```
+
 ## Try it
 
 The repository contains an `example.js` that you can run to play around and try
