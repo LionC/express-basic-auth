@@ -13,7 +13,7 @@ function safeCompare(userInput, secret) {
     const secretBuffer = Buffer.alloc(userInputLength, 0, 'utf8')
     secretBuffer.write(secret)
 
-    return !!(timingSafeEqual(userInputBuffer, secretBuffer) & userInputLength === secretLength)
+    return !!(timingSafeEqual(userInputBuffer, secretBuffer) && userInputLength === secretLength)
 }
 
 function ensureFunction(option, defaultValue) {
