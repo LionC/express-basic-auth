@@ -57,6 +57,8 @@ declare namespace expressBasicAuth {
 
     type ValueOrFunction<T> = T | ((req: IBasicAuthedRequest) => T)
 
+    type UnauthorizedResponse = string | Record<string, any>
+
     interface IBaseOptions {
         /**
          * Per default the middleware will not add a WWW-Authenticate challenge header to responses of unauthorized requests.
@@ -84,7 +86,7 @@ declare namespace expressBasicAuth {
          *
          * @default ''
          */
-        unauthorizedResponse?: ValueOrFunction<any>
+        unauthorizedResponse?: ValueOrFunction<UnauthorizedResponse>
     }
 
     interface IUsersOptions extends IBaseOptions {
